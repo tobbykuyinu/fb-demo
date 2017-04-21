@@ -1,0 +1,14 @@
+{
+    "name": "tobbykuyinu/fb-demo",
+    "description": "fb-demo",
+    "type": "project",
+    "require": {
+        "facebook/php-ads-sdk": "^2.8"
+    },
+    "authors": [
+        {
+            "name": "Tobby",
+            "email": "tobbykuyinu@gmail.com"
+        }
+    ]
+}
