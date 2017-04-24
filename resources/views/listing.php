@@ -5,12 +5,12 @@
     </head>
     <body>
         Hello World
-        <?php foreach($pages as $i => $page) { ?>
+        <?php foreach($products as $i => $product) { ?>
             <tr>
-                <td><a href="<?php echo $page ?>"><?php echo $attrs[$i]['title'] ?></a></td>
-                <td><img src="<?php echo $attrs[$i]['image'] ?>"/></td>
-                <td><?php echo $attrs[$i]['price'] ?></td>
-                <td><?php echo $attrs[$i]['description'] ?></td>
+                <td><a href="<?php echo $product->getProductLink() ?>"><?php echo $product->getTitle() ?></a></td>
+                <td><img src="<?php echo $product->getImage() ?>"/></td>
+                <td><?php echo $product->getPrice() ?></td>
+                <td><?php echo $product->getDescription() ?></td>
             </tr>
         <?php }?>
     </body>

@@ -1,10 +1,9 @@
 <html>
     <head>
-        <title>Store Facebook Ad Utility</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Bootstrap Login &amp; Register Templates</title>
+        <title>eCommerce Shop Ads Tool</title>
 
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
@@ -37,12 +36,13 @@
 
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2 text">
-                        <h1><strong>Bootstrap</strong> Login &amp; Register Forms</h1>
+                        <h1><strong>Facebook</strong> eCommerce Shop Ads Tool</h1>
                         <div class="description">
                             <p>
-                                This is a free responsive <strong>"login and register forms"</strong> template made with Bootstrap.
-                                Download it on <a href="http://azmind.com" target="_blank"><strong>AZMIND</strong></a>,
-                                customize and use it as you like!
+                                This tool helps you create product adverts automatically from your store on various
+                                supported eCommerce platforms. Select a platform, provide your shop url and your facebook
+                                page ID and you can create ads automatically for products in your
+                                online store!
                             </p>
                         </div>
                     </div>
@@ -65,34 +65,21 @@
                             <div class="form-bottom">
                                 <form role="form" action="/listing" method="post" class="registration-form">
                                     <div class="form-group">
-                                        <label class="sr-only" for="form-first-name">First name</label>
-                                        <div class="form-group">
-                                            <button type="button" class="btn form-control dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Action
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                                <div role="separator" class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#">Separated link</a>
-                                            </div>
-                                        </div>
+                                        <label class="sr-only" for="form-platform-select">Select Platform</label>
+                                        <select class="form-control" required="required" id="form-platform-select" name="form-platform-select">
+                                            <option value="" disabled selected>Select a platform</option>
+                                            <option value="amazon_de">Amazon DE</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
-                                        <label class="sr-only" for="form-last-name">Last name</label>
-                                        <input type="text" name="form-last-name" placeholder="Last name..." class="form-last-name form-control" id="form-last-name">
+                                        <label class="sr-only" for="form-store-url">Store URL</label>
+                                        <input type="text" required name="form-store-url" placeholder="Merchant Store URL" class="form-control" id="form-store-url">
                                     </div>
                                     <div class="form-group">
-                                        <label class="sr-only" for="form-email">Email</label>
-                                        <input type="text" name="form-email" placeholder="Email..." class="form-email form-control" id="form-email">
+                                        <label class="sr-only" for="form-page-id">Page ID</label>
+                                        <input type="text" required name="form-page-id" placeholder="Facebook Page ID" class="form-control" id="form-page-id">
                                     </div>
-                                    <div class="form-group">
-                                        <label class="sr-only" for="form-about-yourself">About yourself</label>
-                                        <textarea name="form-about-yourself" placeholder="About yourself..."
-                                                  class="form-about-yourself form-control" id="form-about-yourself"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn">Sign me up!</button>
+                                    <button type="submit" class="btn">Continue</button>
                                 </form>
                             </div>
                         </div>
@@ -113,7 +100,7 @@
 
                 <div class="col-sm-8 col-sm-offset-2">
                     <div class="footer-border"></div>
-                    <p>Made by Anli Zaimi at <a href="http://azmind.com" target="_blank"><strong>AZMIND</strong></a>
+                    <p>Made by <a href="mailto:tobbykuyinu@gmail.com" target="_blank"><strong>Tobby Kuyinu</strong></a>
                         having a lot of fun. <i class="fa fa-smile-o"></i></p>
                 </div>
 
