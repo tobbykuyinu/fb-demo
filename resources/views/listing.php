@@ -27,115 +27,84 @@
         <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
     </head>
     <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brand</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">Link</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Link</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <br>
         <hr>
         <div class="container">
             <div class="row">
-                <div class="col-xs-18 col-sm-4 col-md-3">
-                    <div class="productbox">
-                        <div class="imgthumb img-responsive">
-                            <img src="http://lorempixel.com/250/250/business/?ab=1df">
-                        </div>
-                        <div class="caption">
-                            <h5>Lorem ipsum dolor sit amet</h5>
-                            <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-edit"></i></a> <a href="#" class="btn btn-info btn-xs" role="button">Button</a> <a href="#" class="btn btn-default btn-xs" role="button">Button</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xs-18 col-sm-4 col-md-3">
-                    <div class="productbox">
-                        <div class="imgthumb img-responsive">
-                            <img src="http://lorempixel.com/250/250/business/?ac=23">
-                        </div>
-                        <div class="caption">
-                            <h5>Lorem ipsum dolor</h5>
-                            <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-edit"></i></a> <a href="#" class="btn btn-info btn-xs" role="button">Button</a> <a href="#" class="btn btn-default btn-xs" role="button">Button</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xs-18 col-sm-4 col-md-3">
-                    <div class="productbox">
-                        <div class="imgthumb img-responsive">
-                            <img src="http://lorempixel.com/250/250/business/?af=3">
-                        </div>
-                        <div class="caption">
-                            <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h5>
-                            <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-edit"></i></a> <a href="#" class="btn btn-info btn-xs" role="button">Button</a> <a href="#" class="btn btn-default btn-xs" role="button">Button</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xs-18 col-sm-4 col-md-3">
-                    <div class="productbox">
-                        <div class="imgthumb img-responsive">
-                            <img src="http://lorempixel.com/250/250/business/?a=4">
-                        </div>
-                        <div class="caption">
-                            <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit Lorem ipsum dolor sit amet, consectetur adipisicing elit</h5>
-                            <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-edit"></i></a> <a href="#" class="btn btn-info btn-xs" role="button">Button</a> <a href="#" class="btn btn-default btn-xs" role="button">Button</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xs-18 col-sm-4 col-md-3">
-                    <div class="productbox">
-                        <div class="imgthumb img-responsive">
-                            <img src="http://lorempixel.com/250/250/business/?ag=5">
-                        </div>
-                        <div class="caption">
-                            <h5>Thumbnail label</h5>
-                            <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-edit"></i></a> <a href="#" class="btn btn-info btn-xs" role="button">Button</a> <a href="#" class="btn btn-default btn-xs" role="button">Button</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xs-18 col-sm-4 col-md-3">
-                    <div class="productbox">
-                        <div class="imgthumb img-responsive">
-                            <img src="http://lorempixel.com/250/250/business/?a=6">
-                        </div>
-                        <div class="caption">
-                            <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit</h5>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-info btn-xs" role="button">Left</button>
-                                <button type="button" class="btn btn-default btn-xs" role="button">Right</button>
+                <?php foreach($products as $i => $product) { ?>
+                    <div class="col-xs-18 col-sm-4 col-md-3">
+                        <div class="productbox">
+                            <div class="imgthumb img-responsive">
+                                <img height="250" width="250" src="<?php echo $product->getImage() ?>">
                             </div>
-                            <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-edit"></i></a>
+                            <div class="caption">
+                                <h5><?php echo $product->getTitle() ?></h5>
+                                <b class="finalprice"><?php echo $product->getPrice() ?></b> from <b>Amazon</b>
+                                <p>
+                                    <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-edit"></i></a>
+                                    <a href="<?php echo $product->getProductLink() ?>" class="btn btn-info btn-xs" role="button">View</a>
+                                    <a href="#" class="btn btn-default btn-xs" role="button">Button</a>
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-xs-18 col-sm-4 col-md-3">
-                    <div class="productbox">
-                        <div class="imgthumb img-responsive">
-                            <img src="http://lorempixel.com/250/250/business/?a=7">
-                        </div>
-                        <div class="caption">
-                            <h5>Thumbnail label</h5>
-                            <s class="text-muted">$2.29</s> <b class="finalprice">$1.2</b> from <b>Amazon</b>
-                            <a href="#" class="btn btn-default btn-xs pull-right" role="button"><i class="glyphicon glyphicon-zoom-in"></i></a>
-                            <p>
-                                <button type="button" class="btn btn-success btn-md btn-block">Get Offer</button>
-                            </p>
-                        </div>
-                        <div class="saleoffrate">
-                            <b>90%</b><br>OFF
-                        </div>
-                    </div>
-                </div>
+                <?php }?>
             </div><!--/row-->
         </div><!--/container -->
-        Hello World
-        <?php foreach($products as $i => $product) { ?>
-            <tr>
-                <td><a href="<?php echo $product->getProductLink() ?>"><?php echo $product->getTitle() ?></a></td>
-                <td><img src="<?php echo $product->getImage() ?>"/></td>
-                <td><?php echo $product->getPrice() ?></td>
-                <td><?php echo $product->getDescription() ?></td>
-            </tr>
-        <?php }?>
-
         <!-- Footer -->
         <footer>
             <div class="container">
@@ -143,7 +112,7 @@
 
                     <div class="col-sm-8 col-sm-offset-2">
                         <div class="footer-border"></div>
-                        <p>Made by Anli Zaimi at <a href="http://azmind.com" target="_blank"><strong>AZMIND</strong></a>
+                        <p>Made by <a href="mailto:tobbykuyinu@gmail.com" target="_blank"><strong>Tobby Kuyinu</strong></a>
                             having a lot of fun. <i class="fa fa-smile-o"></i></p>
                     </div>
 

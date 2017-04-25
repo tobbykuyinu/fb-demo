@@ -3,6 +3,7 @@
 namespace App\Components\Platforms;
 
 use DOMDocument;
+use DOMXPath;
 
 class Product implements IProduct
 {
@@ -23,13 +24,20 @@ class Product implements IProduct
 
         $this->id = trim($dom->getElementById('ASIN')->getAttribute('value'));
         $price = $dom->getElementById('priceblock_ourprice') ?? $dom->getElementById('priceblock_saleprice');
-        $price = $price ? $price->nodeValue : '';
-        $this->price = trim($price);
-        $this->description = trim($dom->getElementById('productDescription')?
-            $dom->getElementById('productDescription')->nodeValue : '');
-        $this->title = trim($dom->getElementById('productTitle')->nodeValue);
-        $this->brand = trim($dom->getElementById('brand')->nodeValue);
+        $finder = new DOMXPath($dom);
+        $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' a-color-price ')]");
+        $price = $price ?? $nodes[0];
+
+        $this->price = trim($this->valueOrEmpty($price));
+        $this->description = $this->valueOrEmpty($dom->getElementById('productDescription'));
+        $this->title = $this->valueOrEmpty($dom->getElementById('productTitle'));
+        $this->brand = $this->valueOrEmpty($dom->getElementById('brand'));
         $this->image = trim($dom->getElementById('landingImage')->getAttribute('src'));
+    }
+
+    private function valueOrEmpty($obj)
+    {
+        return $obj ? trim($obj->nodeValue) : '';
     }
 
     public function getId()

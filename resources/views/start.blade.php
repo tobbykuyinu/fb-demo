@@ -41,8 +41,7 @@
                             <p>
                                 This tool helps you create product adverts automatically from your store on various
                                 supported eCommerce platforms. Select a platform, provide your shop url and your facebook
-                                page ID and you can create ads automatically for products in your
-                                online store!
+                                page ID and you can create ads automatically for products in your online store!
                             </p>
                         </div>
                     </div>
