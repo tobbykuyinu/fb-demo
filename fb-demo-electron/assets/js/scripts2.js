@@ -20,11 +20,28 @@ function bar_progress(progress_line_object, direction) {
 }
 
 function getStoreProducts() {
-	let platform = $('#form-platform-select').val();
+	$('#product-list').text('loading...');
+	let platformCode = $('#form-platform-select').val();
 	let storeUrl = $('#form-store-url').val();
 	let pageId = $('#form-page-id').val();
+	let path = require('path');
+	const platformProducts = require(path.resolve('assets/js/Platform'));
 	const ch = require('cheerio');
-	
+	const request = require('request');
+
+	request(storeUrl, (err, res, body) => {
+		if (err || body === undefined) {
+			console.log('nothing');
+			$('#product-list').text('Unable to fetch products. Please check that the store url is correct');
+			return;
+		}
+
+		const platform = platformProducts[platformCode](body);
+		platform.getProducts().then(console.log);
+
+		console.log($c('#pagnNextLink')[0].attribs.href);
+		$('#product-list').html('found');
+	})
 }
 
 jQuery(document).ready(function() {
