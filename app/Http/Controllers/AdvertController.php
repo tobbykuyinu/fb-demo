@@ -21,7 +21,8 @@ class AdvertController extends Controller
         $storeUrl = $fields['form-store-url'];
         $fbPageId = $fields['form-page-id'];
 
-        $products = $this->adService->getListings($platform, $storeUrl);
+        //$products = $this->adService->getListings($platform, $storeUrl);
+        $products = [];
 
         return view('listing', ['products' => $products, 'fbPageId' => $fbPageId]);
     }

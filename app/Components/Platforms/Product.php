@@ -22,12 +22,11 @@ class Product implements IProduct
         @$dom->loadHTMLFile($productUrl);
 
         $this->id = trim($dom->getElementById('ASIN')->getAttribute('value'));
-        $this->price = trim(
-            $dom->getElementById('priceblock_ourprice') ?
-                $dom->getElementById('priceblock_ourprice')->nodeValue :
-                $dom->getElementById('priceblock_saleprice')->nodeValue
-        );
-        $this->description = trim($dom->getElementById('productDescription')->nodeValue);
+        $price = $dom->getElementById('priceblock_ourprice') ?? $dom->getElementById('priceblock_saleprice');
+        $price = $price ? $price->nodeValue : '';
+        $this->price = trim($price);
+        $this->description = trim($dom->getElementById('productDescription')?
+            $dom->getElementById('productDescription')->nodeValue : '');
         $this->title = trim($dom->getElementById('productTitle')->nodeValue);
         $this->brand = trim($dom->getElementById('brand')->nodeValue);
         $this->image = trim($dom->getElementById('landingImage')->getAttribute('src'));
