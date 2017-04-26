@@ -21,17 +21,24 @@ const amazonDE = (body) => {
                         }
 
                         let prod = ch.load(body);
-                        let prodObj = {
-                            link: url,
-                            id: prod('#ASIN')[0].attribs.value,
-                            price: prod('#priceblock_ourprice') ? prod('#priceblock_ourprice').text() :
-                                prod('#priceblock_saleprice') ? prod('#priceblock_saleprice').text() :
-                                    prod('.a-color-price') ? prod('.a-color-price')[0].children[0].data : '',
-                            description: prod('#productDescription') ? prod('#productDescription').text() : '',
-                            title: prod('#productTitle') ? prod('#productTitle').text() : '',
-                            brand: prod('#brand') ? prod('#brand').text() : '',
-                            image: prod('#landingImage') ? prod('#landingImage')[0].attribs.src : ''
+                        const prodObj = {
+                            link: url.trim(),
+                            id: prod('#ASIN')[0].attribs.value.trim(),
+                            price: prod('#priceblock_ourprice') ? prod('#priceblock_ourprice').text().trim() :
+                                prod('#priceblock_saleprice') ? prod('#priceblock_saleprice').text().trim() :
+                                    prod('.a-color-price') ? prod('.a-color-price')[0].children[0].data.trim() : '',
+                            description: prod('#productDescription') ? prod('#productDescription').text().trim() : '',
+                            title: prod('#productTitle') ? prod('#productTitle').text().trim() : '',
+                            brand: prod('#brand') ? prod('#brand').text().trim() : '',
+                            image: prod('#landingImage') ? prod('#landingImage')[0].attribs.src.trim() : ''
                         };
+                        $('#product-list').append(`
+                            <li>
+                                <label class="checkbox-inline">
+                                    <input name="selected-products" type="checkbox" value="${prodObj.id}">${prodObj.id} - ${prodObj.title}
+                                </label>
+                            </li>
+                        `);
                         products.push(prodObj);
                     })
                 );
@@ -43,7 +50,7 @@ const amazonDE = (body) => {
         getNextUrl: () => {
             let $ch = ch.load(body);
             const next = '#pagnNextLink';
-            if ($ch(next)) {
+            if ($ch(next)[0]) {
                 return 'http://www.amazon.de' + $ch(next)[0].attribs.href;
             }
             return '';

@@ -1,3 +1,5 @@
+let storeProducts = [];
+let pageId;
 
 function scroll_to_class(element_class, removed_height) {
 	var scroll_to = $(element_class).offset().top - removed_height;
@@ -23,7 +25,7 @@ function getStoreProducts() {
 	$('#product-list-loader').text('loading...');
 	let platformCode = $('#form-platform-select').val();
 	let storeUrl = $('#form-store-url').val();
-	let pageId = $('#form-page-id').val();
+	pageId = $('#form-page-id').val();
 	let path = require('path');
 	const platformProducts = require(path.resolve('assets/js/Platform'));
 	const ch = require('cheerio');
@@ -38,17 +40,14 @@ function getStoreProducts() {
 
 		const platform = platformProducts[platformCode](body);
 		platform.getProducts().then(products => {
-			for (let i =0; i<products.length; i++) {
-				const prod = products[i];
-				console.log(prod);
-				$('#product-list').append(`
-					<li>${prod.id}</li>
-				`);
+			storeProducts.concat(products);
+            $('#product-list-loader').text('');
+            if (platform.getNextUrl()) {
+                $('#form-store-url').val(platform.getNextUrl());
+                getStoreProducts();
 			}
-		});
-
-		$('#product-list-loader').html('found');
-	})
+		}).catch(console.log);
+	});
 }
 
 jQuery(document).ready(function() {
@@ -95,7 +94,13 @@ jQuery(document).ready(function() {
     	// fields validation
 
 		if ($(this)[0].id === 'store-details') {
+			$('#product-list').text('');
+			storeProducts = [];
 			getStoreProducts();
+		}
+
+		if ($(this)[0].id === 'select-products') {
+			$('')
 		}
     	
     	if( next_step ) {
