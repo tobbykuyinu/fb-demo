@@ -20,7 +20,7 @@ function bar_progress(progress_line_object, direction) {
 }
 
 function getStoreProducts() {
-	$('#product-list').text('loading...');
+	$('#product-list-loader').text('loading...');
 	let platformCode = $('#form-platform-select').val();
 	let storeUrl = $('#form-store-url').val();
 	let pageId = $('#form-page-id').val();
@@ -32,15 +32,22 @@ function getStoreProducts() {
 	request(storeUrl, (err, res, body) => {
 		if (err || body === undefined) {
 			console.log('nothing');
-			$('#product-list').text('Unable to fetch products. Please check that the store url is correct');
+			$('#product-list-loader').text('Unable to fetch products. Please check that the store url is correct');
 			return;
 		}
 
 		const platform = platformProducts[platformCode](body);
-		platform.getProducts().then(console.log);
+		platform.getProducts().then(products => {
+			for (let i =0; i<products.length; i++) {
+				const prod = products[i];
+				console.log(prod);
+				$('#product-list').append(`
+					<li>${prod.id}</li>
+				`);
+			}
+		});
 
-		console.log($c('#pagnNextLink')[0].attribs.href);
-		$('#product-list').html('found');
+		$('#product-list-loader').html('found');
 	})
 }
 

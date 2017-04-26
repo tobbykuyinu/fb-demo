@@ -7,55 +7,50 @@ const amazonDE = (body) => {
     return {
         getProducts: () => {
             let $ch = ch.load(body);
-            const next = '#pagnNextLink';
             let promises = [];
             let products = [];
-            let checked = [];
             let ps = $ch('.s-access-detail-page');
 
-            if ($ch(next)) {
-                console.log($ch(next));
-                ps.each((i, productUrl) => {
-                    const url = productUrl.attribs.href;
-                    if (checked.indexOf(url) < 0) {
-                        promises.push(
-                            request(url, (err, res, body) => {
-                                if (err || body === undefined) {
-                                    console.log('error getting url: ', url);
-                                    return;
-                                }
+            ps.each((i, productUrl) => {
+                const url = productUrl.attribs.href;
+                promises.push(
+                    request(url, (err, res, body) => {
+                        if (err || body === undefined) {
+                            console.log('error getting url: ', url);
+                            return;
+                        }
 
-                                let prod = ch.load(body);
-                                let prodObj = {
-                                    id: prod('#ASIN').text(),
-                                    price: prod('.a-color-price')[0].text(),
-                                    description: prod('#productDescription') ? prod('#productDescription').text() : '',
-                                    title: prod('#productTitle') ? prod('#productTitle').text() : '',
-                                    brand: prod('#brand') ? prod('#brand').text() : '',
-                                    image: prod('#landingImage') ? prod('#landingImage')[0].attribs.src : ''
-                                };
-                                products.push(prodObj);
-                            })
-                        );
-                        checked.push(url);
-                    }
-                });
-                const nLink = 'http://www.amazon.de' + $ch(next)[0].attribs.href;
-                request(nLink, (err, res, body) => {
-                    if (err || body === undefined){
-                        console.log('error getting url: ', nLink);
-                        return;
-                    }
-
-                    return amazonDE(body);
-                });
-            }
+                        let prod = ch.load(body);
+                        let prodObj = {
+                            link: url,
+                            id: prod('#ASIN')[0].attribs.value,
+                            price: prod('#priceblock_ourprice') ? prod('#priceblock_ourprice').text() :
+                                prod('#priceblock_saleprice') ? prod('#priceblock_saleprice').text() :
+                                    prod('.a-color-price') ? prod('.a-color-price')[0].children[0].data : '',
+                            description: prod('#productDescription') ? prod('#productDescription').text() : '',
+                            title: prod('#productTitle') ? prod('#productTitle').text() : '',
+                            brand: prod('#brand') ? prod('#brand').text() : '',
+                            image: prod('#landingImage') ? prod('#landingImage')[0].attribs.src : ''
+                        };
+                        products.push(prodObj);
+                    })
+                );
+            });
 
             return Promise.all(promises).then(() => {return products});
+        },
+
+        getNextUrl: () => {
+            let $ch = ch.load(body);
+            const next = '#pagnNextLink';
+            if ($ch(next)) {
+                return 'http://www.amazon.de' + $ch(next)[0].attribs.href;
+            }
+            return '';
         }
     }
 };
 
 module.exports = {
     'amazon_de': amazonDE
-}
+};
