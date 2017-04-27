@@ -1,5 +1,9 @@
+const request = require('request');
+
 let storeProducts = [];
-let pageId;
+let pageId, platformCode, platform;
+let path = require('path');
+const platformProducts = require(path.resolve('assets/js/Platform'));
 
 function scroll_to_class(element_class, removed_height) {
 	var scroll_to = $(element_class).offset().top - removed_height;
@@ -23,30 +27,80 @@ function bar_progress(progress_line_object, direction) {
 
 function getStoreProducts() {
 	$('#product-list-loader').text('loading...');
-	let platformCode = $('#form-platform-select').val();
 	let storeUrl = $('#form-store-url').val();
+	platformCode = $('#form-platform-select').val();
 	pageId = $('#form-page-id').val();
-	let path = require('path');
-	const platformProducts = require(path.resolve('assets/js/Platform'));
-	const ch = require('cheerio');
-	const request = require('request');
 
-	request(storeUrl, (err, res, body) => {
-		if (err || body === undefined) {
-			console.log('nothing');
-			$('#product-list-loader').text('Unable to fetch products. Please check that the store url is correct');
-			return;
-		}
+	let reqProds = new Promise((resolve, reject) => {
+		request(storeUrl, (err, res, body)=> {
+			if (err || body === undefined) reject(err);
+			resolve(body);
+		});
+	});
 
-		const platform = platformProducts[platformCode](body);
-		platform.getProducts().then(products => {
-			storeProducts.concat(products);
-            $('#product-list-loader').text('');
+	reqProds.then(body => {
+		platform = platformProducts[platformCode](body);
+		platform.getProducts().then((products) => {
+			$('#product-list-loader').text('');
+
+			products.forEach(prodObj => {
+				$('#product-list').append(`
+					<span>
+						<label class="checkbox-inline">
+							<input class="select-prod-checkbox" name="selected-products" type="checkbox" value="${prodObj.id}">${prodObj.id} - ${prodObj.title}
+						</label>
+					</span>
+					<br>
+				`);
+			});
+
             if (platform.getNextUrl()) {
                 $('#form-store-url').val(platform.getNextUrl());
                 getStoreProducts();
+			} else {
+				$('.select-prod-checkbox').change(function(){
+					if ($('input[name="selected-products"]:checked').length > 10) {
+						$(this).prop('checked', false);
+					}
+				});
 			}
 		}).catch(console.log);
+	}).catch(()=> {
+		$('#product-list-loader').text('Unable to fetch products. Please check that the store url is correct');
+		return;
+	});
+}
+
+function advertiseSelectedProducts(cpcBid) {
+	const selected = $('input[name="selected-products"]:checked');
+	let selectedIds = [];
+
+	selected.each(prod => {
+		selectedIds.push($(selected[prod]).val());
+	});
+	const productsToAdvertise = storeProducts.filter(prod => {
+		return selectedIds.indexOf(prod.id) >= 0;
+	});
+	console.log(productsToAdvertise);
+	let message = `<div class="f1-step-icon"><i class="fa fa-facebook"></i></div>
+				   	  Thanks. Your Ads are on the way!`;
+
+	$('#final-status').text('Done!');
+	$('#bid-div').html(message);
+	$('#final-submit').hide();
+	$('#final-prev').hide();
+
+	request.post({
+		headers: {'content-type' : 'application/json'},
+		url:     'http://localhost:8080/createads',
+		body:    JSON.stringify({ products: productsToAdvertise, bid: cpcBid })
+	}, function(error, response, body){
+		if (error) {
+			console.log(error.message);
+			return;
+		}
+
+		console.log(body);
 	});
 }
 
@@ -100,7 +154,15 @@ jQuery(document).ready(function() {
 		}
 
 		if ($(this)[0].id === 'select-products') {
-			$('')
+			$('#success-status').hide();
+			$('#final-status').show();
+			$('#bid-div').show();
+			$('#ad-create-success').hide();
+			$('#final-submit').show();
+			$('input[name="form-cpc-bid"]').attr('placeholder', 'Your Cost Per Click Bid'+' (in '+platform.getCurrency()+')');
+
+			const selected = $('input[name="selected-products"]:checked');
+			next_step = selected.length > 0;
 		}
     	
     	if( next_step ) {
@@ -138,19 +200,12 @@ jQuery(document).ready(function() {
     
     // submit
     $('.f1').on('submit', function(e) {
-    	
-    	// fields validation
-    	$(this).find('input[type="text"], input[type="password"], textarea').each(function() {
-    		if( $(this).val() == "" ) {
-    			e.preventDefault();
-    			$(this).addClass('input-error');
-    		}
-    		else {
-    			$(this).removeClass('input-error');
-    		}
-    	});
-    	// fields validation
-    	
+		e.preventDefault();
+    	const cpcBid = $('#form-cpc-bid').val();
+
+		if (cpcBid) {
+			advertiseSelectedProducts(cpcBid);
+		}
     });
     
     

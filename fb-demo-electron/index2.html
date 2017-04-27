@@ -102,22 +102,21 @@
                             </fieldset>
 
                             <fieldset>
-                                <h4>Social media profiles:</h4>
-                                <div class="form-group">
-                                    <label class="sr-only" for="f1-facebook">Facebook</label>
-                                    <input type="text" name="f1-facebook" placeholder="Facebook..." class="f1-facebook form-control" id="f1-facebook">
+                                <h4 id="final-status">Almost there!</h4>
+                                <h4 id="success-status">Done!</h4>
+
+                                <div id="bid-div" class="form-group">
+                                    <label class="sr-only" for="form-cpc-bid">Store URL</label>
+                                    <input type="number" required name="form-cpc-bid" placeholder="Your Cost Per Click Bid" class="form-control" id="form-cpc-bid">
                                 </div>
-                                <div class="form-group">
-                                    <label class="sr-only" for="f1-twitter">Twitter</label>
-                                    <input type="text" name="f1-twitter" placeholder="Twitter..." class="f1-twitter form-control" id="f1-twitter">
+                                <div id="ad-create-success" class="form-group">
+                                    <div class="f1-step-icon"><i class="fa fa-facebook"></i></div>
+                                    Thanks. Your Ads are on the way!
                                 </div>
-                                <div class="form-group">
-                                    <label class="sr-only" for="f1-google-plus">Google plus</label>
-                                    <input type="text" name="f1-google-plus" placeholder="Google plus..." class="f1-google-plus form-control" id="f1-google-plus">
-                                </div>
+
                                 <div class="f1-buttons">
-                                    <button type="button" class="btn btn-previous">Previous</button>
-                                    <button type="submit" class="btn btn-submit">Submit</button>
+                                    <button type="button" id="final-prev" class="btn btn-previous">Previous</button>
+                                    <button type="submit" id="final-submit" class="btn btn-submit">Submit</button>
                                 </div>
                             </fieldset>
                     	
