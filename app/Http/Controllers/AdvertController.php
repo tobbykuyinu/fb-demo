@@ -26,4 +26,10 @@ class AdvertController extends Controller
 
         return view('listing', ['products' => $products, 'fbPageId' => $fbPageId]);
     }
+
+    public function create(Request $request)
+    {
+        $fields = $request->all();
+        dd($fields);
+    }
 }

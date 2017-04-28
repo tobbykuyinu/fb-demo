@@ -1,7 +1,7 @@
 const request = require('request');
 
 let storeProducts = [];
-let pageId, platformCode, platform;
+let pageId, platformCode, platform, adAcctId;
 let path = require('path');
 const platformProducts = require(path.resolve('assets/js/Platform'));
 
@@ -29,6 +29,7 @@ function getStoreProducts() {
 	$('#product-list-loader').text('loading...');
 	let storeUrl = $('#form-store-url').val();
 	platformCode = $('#form-platform-select').val();
+	adAcctId = $('#form-ad-account-id').val();
 	pageId = $('#form-page-id').val();
 
 	let reqProds = new Promise((resolve, reject) => {
@@ -71,7 +72,7 @@ function getStoreProducts() {
 	});
 }
 
-function advertiseSelectedProducts(cpcBid) {
+function advertiseSelectedProducts(cpcBid, budget) {
 	const selected = $('input[name="selected-products"]:checked');
 	let selectedIds = [];
 
@@ -81,7 +82,7 @@ function advertiseSelectedProducts(cpcBid) {
 	const productsToAdvertise = storeProducts.filter(prod => {
 		return selectedIds.indexOf(prod.id) >= 0;
 	});
-	console.log(productsToAdvertise);
+
 	let message = `<div class="f1-step-icon"><i class="fa fa-facebook"></i></div>
 				   	  Thanks. Your Ads are on the way!`;
 
@@ -89,11 +90,19 @@ function advertiseSelectedProducts(cpcBid) {
 	$('#bid-div').html(message);
 	$('#final-submit').hide();
 	$('#final-prev').hide();
+	$('#restart').show();
 
 	request.post({
 		headers: {'content-type' : 'application/json'},
 		url:     'http://localhost:8080/createads',
-		body:    JSON.stringify({ products: productsToAdvertise, bid: cpcBid })
+		body:    JSON.stringify({
+			products: productsToAdvertise,
+			bid: cpcBid,
+			budget: budget,
+			currency: platform.getCurrency(),
+			ad_account: adAcctId,
+			page_id: pageId
+		})
 	}, function(error, response, body){
 		if (error) {
 			console.log(error.message);
@@ -158,8 +167,10 @@ jQuery(document).ready(function() {
 			$('#final-status').show();
 			$('#bid-div').show();
 			$('#ad-create-success').hide();
+			$('#restart').hide();
 			$('#final-submit').show();
 			$('input[name="form-cpc-bid"]').attr('placeholder', 'Your Cost Per Click Bid'+' (in '+platform.getCurrency()+')');
+			$('input[name="form-cpc-budget"]').attr('placeholder', 'Your Budget'+' (in '+platform.getCurrency()+')');
 
 			const selected = $('input[name="selected-products"]:checked');
 			next_step = selected.length > 0;
@@ -179,6 +190,10 @@ jQuery(document).ready(function() {
     	}
     	
     });
+
+	$('#restart').on('click', () => {
+		location.reload();
+	});
     
     // previous step
     $('.f1 .btn-previous').on('click', function() {
@@ -202,9 +217,10 @@ jQuery(document).ready(function() {
     $('.f1').on('submit', function(e) {
 		e.preventDefault();
     	const cpcBid = $('#form-cpc-bid').val();
+    	const budget = $('#form-cpc-budget').val();
 
 		if (cpcBid) {
-			advertiseSelectedProducts(cpcBid);
+			advertiseSelectedProducts(cpcBid, budget);
 		}
     });
     
