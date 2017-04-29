@@ -14,5 +14,8 @@
     "electron": "^1.6.6",
     "jimp": "^0.2.27",
     "jquery": "^3.2.1"
+  },
+  "devDependencies": {
+    "electron-packager": "^8.6.0"
   }
 }
