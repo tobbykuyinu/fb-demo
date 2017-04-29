@@ -1,9 +1,12 @@
 const request = require('request');
+const ACCESS_TOKEN = 'EAAXxGVI79FQBACfVZBTnvJ4jQZB98YeO76TnaiPt9yblWhq2w5wxrRbzaNFYGZB68z8VZCIJQUQFE7T6LO4D6pZCMsVbDNukZBX3ZCdQc7yrNemTQV0VARiO7mst3s2vsmVdbUlXWA49EUleMGbxhi2hyVGTWfxYrgZD';
 
 let storeProducts = [];
-let pageId, platformCode, platform, adAcctId;
+let pageId, platformCode, platform, adAcctId, shopUrl;
 let path = require('path');
+const base64Img = require('base64-img');
 const platformProducts = require(path.resolve('assets/js/Platform'));
+const advertiseTool = require(path.resolve('assets/js/Advertise'));
 
 function scroll_to_class(element_class, removed_height) {
 	var scroll_to = $(element_class).offset().top - removed_height;
@@ -79,38 +82,95 @@ function advertiseSelectedProducts(cpcBid, budget) {
 	selected.each(prod => {
 		selectedIds.push($(selected[prod]).val());
 	});
-	const productsToAdvertise = storeProducts.filter(prod => {
+	let productsToAdvertise = storeProducts.filter(prod => {
 		return selectedIds.indexOf(prod.id) >= 0;
 	});
 
-	let message = `<div class="f1-step-icon"><i class="fa fa-facebook"></i></div>
+	platform.getAdImages(productsToAdvertise).then((res) => {
+		let promises = [];
+		res.forEach(prod => {
+			promises.push(
+				new Promise((resolve, reject) => {
+					let p = { access_token: ACCESS_TOKEN };
+					if (require('fs').existsSync(path.join(__dirname, prod.image))) {
+                        base64Img.base64(path.join(__dirname, prod.image), (err, data) => {
+                        	p.bytes = data;
+                        	p.bytes = p.bytes.substr(p.bytes.indexOf(',')+1);
+                            request.post({
+                                headers: {'content-type' : 'application/json'},
+                                url: `https://graph.facebook.com/v2.9/act_${adAcctId}/adimages`,
+                                body: JSON.stringify(p)
+                            }, (err, res, body) => {
+                                if (err || !body || JSON.stringify(body) === JSON.stringify({})) {
+                                    console.log(err, body);
+                                    return reject(err);
+                                }
+
+                                body = JSON.parse(body);
+                                prod.image_hash = body.images.bytes.hash;
+                                resolve(body);
+                            });
+						});
+                    }
+				})
+			);
+		});
+        return Promise.all(promises)
+		.then(() => {
+        	let adProds = res.map(prod => {
+        		return {
+        			description: prod.price + ' ' + prod.description,
+					image_hash: prod.image_hash,
+					link: prod.link,
+					name: prod.title
+				};
+			});
+
+            request.post({
+                headers: {'content-type' : 'application/json'},
+                url:     `https://graph.facebook.com/v2.9/act_${adAcctId}/adcreatives`,
+                body:    JSON.stringify({
+                    name: pageId,
+                    object_story_spec: {
+                        link_data: {
+                            child_attachments: adProds,
+                            link: shopUrl
+                        },
+                        page_id: pageId
+                    },
+                    access_token: ACCESS_TOKEN
+                })
+            }, function(error, response, body){
+                if (error) {
+                    console.log(error.message);
+                    return;
+                }
+
+                body = JSON.parse(body);
+                console.log('successfully created ad creative', body);
+                advertiseTool.createAd(body.id, pageId, budget, cpcBid)
+				.then(() => {
+                    let message = `<div class="f1-step-icon"><i class="fa fa-facebook"></i></div>
 				   	  Thanks. Your Ads are on the way!`;
 
-	$('#final-status').text('Done!');
+                    $('#final-status').text('Done!');
+                    $('#bid-div').html(message);
+                    $('#final-submit').hide();
+                    $('#final-prev').hide();
+                    $('#restart').show();
+				}).catch(console.log);
+            });
+		});
+	}).catch(console.log);
+
+	let message = `<div class="f1-step-icon"><i class="fa fa-facebook"></i></div>
+				   	  Please Wait while ads are being created`;
+
+	$('#final-status').text('Creating your Ads!');
 	$('#bid-div').html(message);
 	$('#final-submit').hide();
 	$('#final-prev').hide();
-	$('#restart').show();
-
-	request.post({
-		headers: {'content-type' : 'application/json'},
-		url:     'http://localhost:8080/createads',
-		body:    JSON.stringify({
-			products: productsToAdvertise,
-			bid: cpcBid,
-			budget: budget,
-			currency: platform.getCurrency(),
-			ad_account: adAcctId,
-			page_id: pageId
-		})
-	}, function(error, response, body){
-		if (error) {
-			console.log(error.message);
-			return;
-		}
-
-		console.log(body);
-	});
+	$('#restart').hide();
 }
 
 jQuery(document).ready(function() {
@@ -158,6 +218,7 @@ jQuery(document).ready(function() {
 
 		if ($(this)[0].id === 'store-details') {
 			$('#product-list').text('');
+            shopUrl = $('#form-store-url').val();
 			storeProducts = [];
 			getStoreProducts();
 		}
@@ -221,8 +282,23 @@ jQuery(document).ready(function() {
 
 		if (cpcBid) {
 			advertiseSelectedProducts(cpcBid, budget);
+			//testbelow();
 		}
     });
+
+    function testbelow() {
+        request.get({
+            headers: {'content-type' : 'application/json'},
+            url:     `https://graph.facebook.com/v2.9/act_${adAcctId}/campaigns?access_token=${ACCESS_TOKEN}&fields=id,name`
+        }, function(error, response, body){
+            if (error) {
+                console.log(error.message);
+                return;
+            }
+
+            console.log(JSON.parse(body));
+        });
+    }
     
     
 });

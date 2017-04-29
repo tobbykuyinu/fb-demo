@@ -60,6 +60,64 @@ const amazonDE = (body) => {
 
         getCurrency: () => {
             return 'EUR';
+        },
+
+        getCountry: () => {
+            return 'DE';
+        },
+
+        getAdImages: (products) => {
+            let prom = [];
+            const base64Img = require('base64-img');
+            const path = require('path');
+
+            products.forEach(prod => {
+                let image = prod.image;
+                let id = prod.id;
+
+                if (image.indexOf('http') > -1) {
+                    prod.image = image;
+                }
+                if (image.indexOf('data:image') > -1) {
+                    image = image.substr(image.indexOf(',')+1);
+                    prom.push(
+                        new Promise((resolve, reject) => {
+                            require("fs").writeFile(`${id}.jpg`, image, 'base64', function(err) {
+                                if(err) reject(err);
+                                else {
+                                    prod.image = `${id}.jpg`;
+                                    resolve(`${id}.jpg`);
+                                }
+                            });
+                        })
+                    );
+                }
+            });
+
+            let promises = [];
+            let Jimp = require('jimp');
+
+            return Promise.all(prom)
+            .then(() => {
+                products.forEach(prod => {
+                    promises.push(
+                        Jimp.read(prod.image).then(function (lenna) {
+                            lenna.resize(400, 256)            // resize
+                                .quality(60)                 // set JPEG quality
+                                .greyscale()                 // set greyscale
+                                .write(`${prod.id}.jpg`); // save
+                        }).then(() => {
+                            prod.image = `${prod.id}.jpg`;
+                        }).catch(function (err) {
+                                console.error(err);
+                            })
+                        );
+                })
+            }).then(() => {
+                return Promise.all(promises);
+            }).then(() => {
+                return products;
+            }).catch(console.log);
         }
     }
 };
