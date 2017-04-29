@@ -34,8 +34,8 @@ let $ = {
             return foundCampaign;
         });
     },
-    adsetExists: (campaignId, platform, pageId) => {
-        const adsetName = platform+'_'+pageId;
+    adsetExists: (campaignId, platform, pageId, budget, cpc) => {
+        const adsetName = platform+'_'+pageId+'_'+budget+'_'+cpc;
         return new Promise((resolve, reject) => {
             request.get({
                 headers: {'content-type' : 'application/json'},
@@ -93,7 +93,7 @@ let $ = {
             });
     },
     createAdSet: (campaignId, platformCode, pageId, budget, CPC) => {
-        const adSetName = platformCode+'_'+pageId;
+        const adSetName = platformCode+'_'+pageId+'_'+budget+'_'+CPC;
         return new Promise((resolve, reject) => {
             request.post({
                 headers: {'content-type' : 'application/json'},
@@ -141,7 +141,7 @@ module.exports = {
             return exists;
         })
         .then(campaignId => {
-            return $.adsetExists(campaignId, platformCode, pageId)
+            return $.adsetExists(campaignId, platformCode, pageId, budget, CPC)
             .then(exists => {
                 if (!exists) {
                     console.log('adset does not exist, creating...');

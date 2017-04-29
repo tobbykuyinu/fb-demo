@@ -230,8 +230,8 @@ jQuery(document).ready(function() {
 			$('#ad-create-success').hide();
 			$('#restart').hide();
 			$('#final-submit').show();
-			$('input[name="form-cpc-bid"]').attr('placeholder', 'Your Cost Per Click Bid'+' (in '+platform.getCurrency()+')');
-			$('input[name="form-cpc-budget"]').attr('placeholder', 'Your Budget'+' (in '+platform.getCurrency()+')');
+			$('input[name="form-cpc-bid"]').attr('placeholder', 'Your Cost Per Click Bid (Min 0.02 USD)');
+			$('input[name="form-cpc-budget"]').attr('placeholder', 'Your Budget (Min 35 USD)');
 
 			const selected = $('input[name="selected-products"]:checked');
 			next_step = selected.length > 0;
